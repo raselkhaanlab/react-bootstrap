@@ -8,12 +8,7 @@ export function SideNav() {
     >
       <Stack gap={3} className="p-3 flex-grow-0">
         <Nav.Link href="/" className="text-white">
-          <Image
-            src="/path-to-your-logo.png"
-            height={32}
-            width={122}
-            alt="Logo"
-          />
+          <Image src="/logo.svg" height={32} width={122} alt="Logo" />
         </Nav.Link>
       </Stack>
       <hr className="border-secondary" />
