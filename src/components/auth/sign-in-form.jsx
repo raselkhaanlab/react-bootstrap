@@ -1,7 +1,49 @@
-import { Form, Button, InputGroup } from "react-bootstrap";
+import { Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { paths } from "../../paths";
+import { useCallback, useState } from "react";
+import { z as zod } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Controller,useForm } from "react-hook-form";
+import {getAuthClient} from "../../services/auth";
+import {useUser} from "../../hooks/use-user";
+import {useNavigate} from "react-router-dom";
+
+const schema = zod.object({
+  email: zod.string().min(1, { message: 'Email is required' }).email(),
+  password: zod.string().min(1, { message: 'Password is required' }),
+});
+
+const defaultValues = { email: 'sofia@devias.io', password: 'Secret1' }
 
 export function SignInForm() {
+  const navigate = useNavigate();
+  const { checkSession } = useUser();
+  const [isPending, setIsPending] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors },
+  } = useForm({ defaultValues, resolver: zodResolver(schema) });
+
+  const onSubmit = useCallback(
+    async (values) => {
+      setIsPending(true);
+      const { error } = await getAuthClient().signInWithPassword(values);
+      if (error) {
+        setError('root', { type: 'server', message: error });
+        setIsPending(false);
+        return;
+      }
+      // Refresh the auth state
+      await checkSession?.();
+      // UserProvider, for this case, will not refresh the router
+      // After refresh, GuestGuard will handle the redirect
+      navigate(paths.dashboard.home);
+    },
+    [checkSession, setError]
+  );
   return (
     <div className="mb-4">
       {/* Header Section */}
@@ -9,38 +51,52 @@ export function SignInForm() {
         <h2 className="mb-1 fw-bold"> Sign in</h2>
         <p className="text-secondary small">
           Don't have an account?
-          <Link to="/registration" className="text-primary fw-bold">
+          <Link to={paths.auth.signUp} className="text-primary fw-bold">
             {" "}
             Sign up
           </Link>
         </p>
       </div>
-
+      {errors.root ? <Alert variant="danger">{errors.root.message}</Alert> : null}
       {/* Form Section */}
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Email Input */}
         <Form.Group className="mb-3">
-          <Form.Label className="text-secondary fw-bold">
-            {" "}
-            {/* small and fw-bold to mimic MUI label */}
-            Email address
-          </Form.Label>
-          <Form.Control
-            type="email"
-            placeholder="Enter your email"
-            className="form-control-md p-3"
+          <Controller
+            control={control}
+            name="email"
+            render={({field})=> (<>
+                <Form.Label className="text-secondary fw-bold">
+                {" "}
+                {/* small and fw-bold to mimic MUI label */}
+                Email address
+              </Form.Label>
+              <Form.Control
+                {...field}
+                type="email"
+                placeholder="Enter your email"
+                className="form-control-md p-3"
+              />
+              {errors.email ? <Alert variant="danger">{errors.email.message}</Alert> : null}
+            </>)}
           />
         </Form.Group>
 
         {/* Password Input */}
         <Form.Group className="mb-3">
-          <Form.Label className="text-secondary fw-bold">
+          <Controller
+            name="password"
+            control={control}
+            render={({field})=> (
+              <>
+              <Form.Label className="text-secondary fw-bold">
             {" "}
             {/* small and fw-bold to mimic MUI label */}
             Password
           </Form.Label>
           <InputGroup className="input-group-md">
             <Form.Control
+              {...field}
               className="p-3"
               type="password"
               placeholder="Enter your password"
@@ -52,9 +108,13 @@ export function SignInForm() {
               {/* Placeholder for the password visibility icon */}
             </InputGroup.Text>
           </InputGroup>
+            {errors.password ? <Alert variant="danger">{errors.password.message}</Alert> : null}
+              </>
+            )}
+          />
         </Form.Group>
         {/* Submit Button */}
-        <Button className="w-100" variant="primary" type="submit">
+        <Button disabled={isPending} className="w-100" variant="primary" type="submit">
           Sign in
         </Button>
       </Form>

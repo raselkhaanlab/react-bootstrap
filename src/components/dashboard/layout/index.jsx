@@ -3,16 +3,17 @@ import { SideNav } from "./side-nav";
 import { MainNav } from "./main-nav";
 import { MobileNav } from "./mobile-nav";
 import { useCallback, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { AuthGuard } from "../../auth/auth-guard";
 
-export function Layout() {
+export function Layout({children}) {
   const [isOpen, setIsOpen] = useState(false);
   const handleToggle = useCallback(() => {
     setIsOpen((prev) => !prev);
   }, []);
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <AuthGuard>
+      <div className="d-flex flex-column min-vh-100">
       <SideNav />
       <MobileNav open={isOpen} onClose={() => setIsOpen(false)} />
       <div className="flex-grow-1 d-flex flex-column ps-lg-280">
@@ -20,10 +21,11 @@ export function Layout() {
         <MainNav onToggle={handleToggle} />
         <main>
           <Container fluid className="py-5">
-            <Outlet />
+            {children}
           </Container>
         </main>
       </div>
     </div>
+    </AuthGuard>
   );
 }

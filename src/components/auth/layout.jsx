@@ -1,9 +1,10 @@
 import { Container, Row, Col, Image } from "react-bootstrap";
 import loginImg from "../../assets/auth-widgets.png";
-import { Outlet } from "react-router-dom";
-export function AuthLayout() {
+import { GuestGuard } from "./guest-guard";
+export function AuthLayout({children}) {
   return (
-    <Container fluid className="d-flex" style={{ minHeight: "100vh" }}>
+    <GuestGuard>
+      <Container fluid className="d-flex" style={{ minHeight: "100vh" }}>
       <Row className="g-0 flex-grow-1 w-100">
         <Col xs={12} lg={6} className="d-flex flex-column">
           <div className="p-3">
@@ -11,7 +12,7 @@ export function AuthLayout() {
           </div>
           <div className="d-flex flex-grow-1 justify-content-center align-items-center p-3">
             <div style={{ maxWidth: "450px", width: "100%" }}>
-              <Outlet />
+              {children}
             </div>
           </div>
         </Col>
@@ -26,13 +27,13 @@ export function AuthLayout() {
           }}
         >
           <div className="text-center">
-            <h1 style={{ fontSize: "24px", lineHeight: "32px" }}>
+            {/* <h1 style={{ fontSize: "24px", lineHeight: "32px" }}>
               Welcome to <span style={{ color: "#15b79e" }}>Devias Kit</span>
             </h1>
             <p className="lead">
               A professional template that comes with ready-to-use Bootstrap
               components.
-            </p>
+            </p> */}
             <div className="d-flex justify-content-center">
               <Image
                 src={loginImg}
@@ -45,5 +46,6 @@ export function AuthLayout() {
         </Col>
       </Row>
     </Container>
+    </GuestGuard>
   );
 }

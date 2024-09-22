@@ -1,8 +1,10 @@
-import { Offcanvas, Stack, Image, Button, Nav } from "react-bootstrap";
+import { Offcanvas, Image, Nav } from "react-bootstrap";
 
 import { navItems } from "./config";
+import { useLocation } from "react-router-dom";
 
 export function MobileNav({ open, onClose }) {
+  const {pathname} = useLocation();
   return (
     <Offcanvas
       className="d-flex d-lg-none flex-column bg-dark text-white mw-280"
@@ -23,7 +25,7 @@ export function MobileNav({ open, onClose }) {
       <Offcanvas.Body className="d-flex flex-column p-0">
         <hr className="border-secondary" />
         <Nav className="flex-column p-3">
-          {renderNavItems({ pathname: "", items: navItems })}
+          {renderNavItems({ pathname, items: navItems })}
         </Nav>
       </Offcanvas.Body>
     </Offcanvas>

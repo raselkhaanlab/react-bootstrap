@@ -1,6 +1,9 @@
-import { Nav, Button, Stack, Image } from "react-bootstrap";
+import { Nav, Stack, Image } from "react-bootstrap";
 import { navItems } from "./config"; // Your navigation items config
+import { useLocation } from "react-router-dom";
 export function SideNav() {
+  const {pathname} = useLocation();
+
   return (
     <div
       className="d-none d-lg-flex flex-column bg-dark text-white fixed-top"
@@ -13,7 +16,7 @@ export function SideNav() {
       </Stack>
       <hr className="border-secondary" />
       <Nav className="flex-column p-3 flex-grow-1">
-        {renderNavItems({ pathname: "", items: navItems })}
+        {renderNavItems({ pathname, items: navItems })}
       </Nav>
     </div>
   );

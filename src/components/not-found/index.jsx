@@ -1,4 +1,4 @@
-import { Container, Row, Col, Button, Image } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Link } from "react-router-dom"; // Assuming you're using react-router for navigation
 import ArrowLeft from "./../icons/arrow-left.svg?react";
 

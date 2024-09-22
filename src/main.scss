@@ -102,5 +102,17 @@ $input-placeholder-color: map-get($neutral, 400);
   max-width: 280px !important;
   width: 100% !important;
 }
+
+.large-checkbox .form-check-input {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
+.table > thead {
+  background-color: rgba(var(--bs-emphasis-color-rgb), 0.075);
+}
+.table > thead > tr > th {
+  background-color: inherit !important;
+}
 // More component-level customizations
 @import "~bootstrap/scss/bootstrap";
