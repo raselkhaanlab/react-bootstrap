@@ -14,7 +14,7 @@ const schema = zod.object({
   password: zod.string().min(1, { message: 'Password is required' }),
 });
 
-const defaultValues = { email: 'sofia@devias.io', password: 'Secret1' }
+const defaultValues = { email: 'rkokk@gg.com', password: 'Abcd1234!' }
 
 export function SignInForm() {
   const navigate = useNavigate();

@@ -33,7 +33,7 @@ export function useSelection(keys) {
   }, []);
 
   const selectedAny = selected.size > 0;
-  const selectedAll = selected.size === keys.length;
+  const selectedAll =  selectedAny && selected.size === keys.length;
 
   return {
     deselectAll: handleDeselectAll,

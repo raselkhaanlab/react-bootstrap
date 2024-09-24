@@ -10,13 +10,12 @@ import {useNavigate} from "react-router-dom";
 import { useCallback, useState } from "react";
 
 const schema = zod.object({
-  firstName: zod.string().min(1, { message: 'First name is required' }),
-  lastName: zod.string().min(1, { message: 'Last name is required' }),
+  name: zod.string().min(1, { message: 'Name is required' }),
   email: zod.string().min(1, { message: 'Email is required' }).email(),
-  password: zod.string().min(6, { message: 'Password should be at least 6 characters' }),
+  password: zod.string().min(1, { message: 'Password should be at least 1 characters' }),
 });
 
-const defaultValues = { firstName: '', lastName: '', email: '', password: '' }
+const defaultValues = { name: '', email: '', password: '' }
 
 export function SignUpForm() {
   const navigate = useNavigate();
@@ -35,7 +34,9 @@ export function SignUpForm() {
   const onSubmit = useCallback(
     async (values) => {
       setIsPending(true);
-      const { error } = await getAuthClient().signUp(values);
+      const res= await getAuthClient().signUp(values);
+      console.log({res})
+      const {error} = res;
       if (error) {
         setError('root', { type: 'server', message: error });
         setIsPending(false);
@@ -63,51 +64,29 @@ export function SignUpForm() {
           </Link>
         </p>
       </div>
-
+      {errors.root ? <Alert variant="danger">{errors.root.message}</Alert> : null}
       {/* Form Section */}
       <Form onSubmit={handleSubmit(onSubmit, (data)=> console.log({data}))}>
         {/* First Name */}
         <Form.Group className="mb-3">
           <Controller
                   control={control}
-                  name="firstName"
+                  name="name"
                   render={({field})=> (<>
                       <Form.Label className="text-secondary fw-bold">
                       {" "}
                       {/* small and fw-bold to mimic MUI label */}
-                      First name
+                      Name
                     </Form.Label>
                     <Form.Control
                       {...field}
                       type="text"
-                      placeholder="Enter your first name"
+                      placeholder="Enter your name"
                       className="form-control-md p-3"
                     />
-                    {errors.firstName ? <Alert variant="danger">{errors.firstName.message}</Alert> : null}
+                    {errors.name ? <Alert variant="danger">{errors.name.message}</Alert> : null}
                 </>)}
               />
-        </Form.Group>
-
-        {/* Last Name */}
-        <Form.Group className="mb-3">
-          <Controller
-                control={control}
-                name="lastName"
-                render={({field})=> (<>
-                    <Form.Label className="text-secondary fw-bold">
-                    {" "}
-                    {/* small and fw-bold to mimic MUI label */}
-                    Last name
-                  </Form.Label>
-                  <Form.Control
-                    {...field}
-                    type="text"
-                    placeholder="Enter your last name"
-                    className="form-control-md p-3"
-                  />
-                  {errors.lastName ? <Alert variant="danger">{errors.lastName.message}</Alert> : null}
-              </>)}
-            />
         </Form.Group>
 
         {/* Email */}

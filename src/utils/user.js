@@ -1,12 +1,12 @@
 export function getUserFirstAndLastChar(user) {
     if(!user) return null;
-    let result = "";
-    if(user.firstName) result+= user.firstName[0];
-    if(user.lastName) result+= user.lastName[0];
-    return result;
+    const parts = user.name?.split(" ") || [];
+    const first = parts[0]?.[0] || "";
+    const last = parts[parts.length -1]?.[0] || "";
+    return first  + last;
 }
 
 export function getFullName(user) {
     if(!user) return null;
-    return user.firstName + " " + user.lastName;
+    return user?.name || "";
 }
