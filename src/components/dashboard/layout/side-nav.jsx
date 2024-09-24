@@ -1,6 +1,7 @@
 import { Nav, Stack, Image } from "react-bootstrap";
 import { navItems } from "./config"; // Your navigation items config
 import { useLocation } from "react-router-dom";
+import Logo from "../../icons/logo.svg?react";
 export function SideNav() {
   const {pathname} = useLocation();
 
@@ -11,7 +12,7 @@ export function SideNav() {
     >
       <Stack gap={3} className="p-3 flex-grow-0">
         <Nav.Link href="/" className="text-white">
-          <Image src="/logo.svg" height={32} width={122} alt="Logo" />
+          <Logo/>
         </Nav.Link>
       </Stack>
       <hr className="border-secondary" />

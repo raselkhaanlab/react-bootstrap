@@ -1,6 +1,7 @@
 import { Container, Row, Col, Image } from "react-bootstrap";
 import loginImg from "../../assets/auth-widgets.png";
 import { GuestGuard } from "./guest-guard";
+import LogoDark from "../icons/logo-dark.svg?react";
 export function AuthLayout({children}) {
   return (
     <GuestGuard>
@@ -8,7 +9,7 @@ export function AuthLayout({children}) {
       <Row className="g-0 flex-grow-1 w-100">
         <Col xs={12} lg={6} className="d-flex flex-column">
           <div className="p-3">
-            <a href={"#"}>Logo</a>
+            <LogoDark/>
           </div>
           <div className="d-flex flex-grow-1 justify-content-center align-items-center p-3">
             <div style={{ maxWidth: "450px", width: "100%" }}>

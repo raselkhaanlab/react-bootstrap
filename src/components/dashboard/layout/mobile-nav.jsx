@@ -2,7 +2,7 @@ import { Offcanvas, Image, Nav } from "react-bootstrap";
 
 import { navItems } from "./config";
 import { useLocation } from "react-router-dom";
-
+import Logo from "../../icons/logo.svg?react";
 export function MobileNav({ open, onClose }) {
   const {pathname} = useLocation();
   return (
@@ -14,12 +14,7 @@ export function MobileNav({ open, onClose }) {
     >
       <Offcanvas.Header closeButton closeVariant="white">
         <Offcanvas.Title>
-          <Image
-            src="/path-to-your-logo.png"
-            height={32}
-            width={122}
-            alt="Logo"
-          />
+          <Logo/>
         </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body className="d-flex flex-column p-0">
