@@ -80,6 +80,11 @@ export function Users() {
         </td>
         <td className="align-middle">
           <Stack direction="horizontal" gap={2} className="align-items-center">
+            <span>{user._id}</span>
+          </Stack>
+        </td>
+        <td className="align-middle">
+          <Stack direction="horizontal" gap={2} className="align-items-center">
             <span>{user.name}</span>
           </Stack>
         </td>
@@ -161,6 +166,7 @@ export function Users() {
                   indeterminate={selectedAny && !selectedAll}
                 />
               </th>
+              <th>Id</th>
               <th>Name</th>
               <th>Email</th>
               <th>Status</th>
