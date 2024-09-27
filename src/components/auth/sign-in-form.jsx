@@ -2,22 +2,24 @@ import { Form, Button, InputGroup, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { paths } from "../../paths";
 import { useCallback, useState } from "react";
-import { z as zod } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller,useForm } from "react-hook-form";
-import {getAuthClient} from "../../services/auth";
-import {useUser} from "../../hooks/use-user";
-import {useNavigate} from "react-router-dom";
-
+import { z as zod } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Controller, useForm } from "react-hook-form";
+import { getAuthClient } from "../../services/auth";
+import { useUser } from "../../hooks/use-user";
+import { useNavigate } from "react-router-dom";
+import { FiEye } from "react-icons/fi";
+import { FiEyeOff } from "react-icons/fi";
 const schema = zod.object({
-  email: zod.string().min(1, { message: 'Email is required' }).email(),
-  password: zod.string().min(1, { message: 'Password is required' }),
+  email: zod.string().min(1, { message: "Email is required" }).email(),
+  password: zod.string().min(1, { message: "Password is required" }),
 });
 
-const defaultValues = { email: 'rkokk@gg.com', password: 'Abcd1234!' }
+const defaultValues = { email: "rkokk@gg.com", password: "Abcd1234!" };
 
 export function SignInForm() {
   const navigate = useNavigate();
+  const [isEyeoff, setIsEyeOff] = useState(true);
   const { checkSession } = useUser();
   const [isPending, setIsPending] = useState(false);
   const {
@@ -32,7 +34,7 @@ export function SignInForm() {
       setIsPending(true);
       const { error } = await getAuthClient().signInWithPassword(values);
       if (error) {
-        setError('root', { type: 'server', message: error });
+        setError("root", { type: "server", message: error });
         setIsPending(false);
         return;
       }
@@ -57,7 +59,9 @@ export function SignInForm() {
           </Link>
         </p>
       </div>
-      {errors.root ? <Alert variant="danger">{errors.root.message}</Alert> : null}
+      {errors.root ? (
+        <Alert variant="danger">{errors.root.message}</Alert>
+      ) : null}
       {/* Form Section */}
       <Form onSubmit={handleSubmit(onSubmit)}>
         {/* Email Input */}
@@ -65,20 +69,24 @@ export function SignInForm() {
           <Controller
             control={control}
             name="email"
-            render={({field})=> (<>
+            render={({ field }) => (
+              <>
                 <Form.Label className="text-secondary fw-bold">
-                {" "}
-                {/* small and fw-bold to mimic MUI label */}
-                Email address
-              </Form.Label>
-              <Form.Control
-                {...field}
-                type="email"
-                placeholder="Enter your email"
-                className="form-control-md p-3"
-              />
-              {errors.email ? <Alert variant="danger">{errors.email.message}</Alert> : null}
-            </>)}
+                  {" "}
+                  {/* small and fw-bold to mimic MUI label */}
+                  Email address
+                </Form.Label>
+                <Form.Control
+                  {...field}
+                  type="email"
+                  placeholder="Enter your email"
+                  className="form-control-md p-3"
+                />
+                {errors.email ? (
+                  <Alert variant="danger">{errors.email.message}</Alert>
+                ) : null}
+              </>
+            )}
           />
         </Form.Group>
 
@@ -87,34 +95,42 @@ export function SignInForm() {
           <Controller
             name="password"
             control={control}
-            render={({field})=> (
+            render={({ field }) => (
               <>
-              <Form.Label className="text-secondary fw-bold">
-            {" "}
-            {/* small and fw-bold to mimic MUI label */}
-            Password
-          </Form.Label>
-          <InputGroup className="input-group-md">
-            <Form.Control
-              {...field}
-              className="p-3"
-              type="password"
-              placeholder="Enter your password"
-            />
-            <InputGroup.Text
-              className="bg-transparent border-left-0"
-              style={{ cursor: "pointer" }}
-            >
-              {/* Placeholder for the password visibility icon */}
-            </InputGroup.Text>
-          </InputGroup>
-            {errors.password ? <Alert variant="danger">{errors.password.message}</Alert> : null}
+                <Form.Label className="text-secondary fw-bold">
+                  {" "}
+                  {/* small and fw-bold to mimic MUI label */}
+                  Password
+                </Form.Label>
+                <InputGroup className="input-group-md">
+                  <Form.Control
+                    {...field}
+                    className="p-3"
+                    type={isEyeoff ? "password" : "text"}
+                    placeholder="Enter your password"
+                  />
+                  <InputGroup.Text
+                    className="bg-transparent border-left-0"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => setIsEyeOff((prev) => !prev)}
+                  >
+                    {isEyeoff ? <FiEyeOff /> : <FiEye />}
+                  </InputGroup.Text>
+                </InputGroup>
+                {errors.password ? (
+                  <Alert variant="danger">{errors.password.message}</Alert>
+                ) : null}
               </>
             )}
           />
         </Form.Group>
         {/* Submit Button */}
-        <Button disabled={isPending} className="w-100" variant="primary" type="submit">
+        <Button
+          disabled={isPending}
+          className="w-100"
+          variant="primary"
+          type="submit"
+        >
           Sign in
         </Button>
       </Form>
