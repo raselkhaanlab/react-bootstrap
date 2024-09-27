@@ -14,7 +14,7 @@ const ActionToolbar = ({
     <Form.Select
       value={parseInt(itemPerPage)}
       onChange={onChange}
-      style={{ width: "220px" }}
+      style={{ width: "min(220px, 50%)" }}
       aria-label="per page users"
     >
       <option value="1">1 - user per page</option>
