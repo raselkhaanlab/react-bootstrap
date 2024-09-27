@@ -1,21 +1,37 @@
-import { useMemo } from 'react';
-import { Table, Form, Stack, Badge } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import ActionToolbar from './ActionToolbar';
-import UsersPagination from './UserPagination';
+import { useMemo } from "react";
+import { Table, Form, Stack, Badge } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import ActionToolbar from "./ActionToolBar";
+import UsersPagination from "./UserPagination";
 import ConfirmModal from "./ConfirmModal";
-import { useSelection } from '../../../hooks/use-selection';
-import useUsers from '../../../hooks/use-users';
-import { useConfirmAction } from '../../../hooks/use-confrim';
-import { deleteusers, updateUsersStatus } from '../../../services/user';
+import { useSelection } from "../../../hooks/use-selection";
+import useUsers from "../../../hooks/use-users";
+import { useConfirmAction } from "../../../hooks/use-confrim";
+import { deleteusers, updateUsersStatus } from "../../../services/user";
 
 export function Users() {
   const defaultPageLimit = 2;
-  const { users, loading, setSearch, page, totalPages, fetchUsers } = useUsers(defaultPageLimit);
-  const rowIds = useMemo(() => users.map(user => user._id), [users]);
-  const { selectAll, deselectAll, selectOne, deselectOne, selected, selectedAny, selectedAll } = useSelection(rowIds);
-  const { showModal, action, confirmingAction, openModal, closeModal, handleConfirm } = useConfirmAction();
+  const { users, loading, setSearch, page, totalPages, fetchUsers } =
+    useUsers(defaultPageLimit);
+  const rowIds = useMemo(() => users.map((user) => user._id), [users]);
+  const {
+    selectAll,
+    deselectAll,
+    selectOne,
+    deselectOne,
+    selected,
+    selectedAny,
+    selectedAll,
+  } = useSelection(rowIds);
+  const {
+    showModal,
+    action,
+    confirmingAction,
+    openModal,
+    closeModal,
+    handleConfirm,
+  } = useConfirmAction();
 
   const goToPage = (pageNumber) => {
     if (pageNumber < 1 || pageNumber > totalPages) return;
@@ -31,21 +47,19 @@ export function Users() {
   };
 
   const handleAction = (actionType) => {
-
     openModal(actionType, async () => {
       if (confirmingAction) return;
       try {
-        if(actionType == "Block") {
+        if (actionType == "Block") {
           await updateUsersStatus(Array.from(selected), "BLOCKED");
-        }
-        else if ( actionType == "Unblock") {
+        } else if (actionType == "Unblock") {
           await updateUsersStatus(Array.from(selected), "UNBLOCKED");
         } else if (actionType == "Delete") {
           await deleteusers(Array.from(selected));
         }
         toast.success(`${actionType} selected users successful`);
         fetchUsers();
-      } catch(e) {
+      } catch (e) {
         toast.error(e.message);
       }
     });
@@ -55,28 +69,35 @@ export function Users() {
     const isSelected = selected?.has(user._id);
 
     return (
-      <tr key={user._id} className={isSelected ? 'table-active' : ''}>
-        <td className='py-3 align-middle'>
+      <tr key={user._id} className={isSelected ? "table-active" : ""}>
+        <td className="py-3 align-middle">
           <Form.Check
             type="checkbox"
             checked={isSelected}
             onChange={(e) => handleSelectOne(user._id, e)}
-            className='large-checkbox'
+            className="large-checkbox"
           />
         </td>
-        <td className='align-middle'>
+        <td className="align-middle">
           <Stack direction="horizontal" gap={2} className="align-items-center">
             <span>{user.name}</span>
           </Stack>
         </td>
-        <td className='align-middle'>{user.email}</td>
+        <td className="align-middle">{user.email}</td>
         <td className="align-middle">
-          <Badge bg={user.status === "BLOCKED" ? "danger" : "success"} className="p-2">
+          <Badge
+            bg={user.status === "BLOCKED" ? "danger" : "success"}
+            className="p-2"
+          >
             {user.status}
           </Badge>
         </td>
-        <td className='align-middle'>{new Date(user.lastLogin).toLocaleString()}</td>
-        <td className='align-middle'>{new Date(user.registrationDate).toLocaleString()}</td>
+        <td className="align-middle">
+          {new Date(user.lastLogin).toLocaleString()}
+        </td>
+        <td className="align-middle">
+          {new Date(user.registrationDate).toLocaleString()}
+        </td>
       </tr>
     );
   };
@@ -124,7 +145,7 @@ export function Users() {
           className="table-hover rounded"
           style={{
             pointerEvents: loading ? "none" : "auto",
-            filter: loading ? "blur(1.2px)" : "none"
+            filter: loading ? "blur(1.2px)" : "none",
           }}
         >
           <thead>
