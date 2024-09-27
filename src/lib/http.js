@@ -42,6 +42,7 @@ protectedClient.interceptors.response.use(
         // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
         console.error("Token refresh failed:", refreshError);
         localStorage.clear();
+        window.location.href = "/sign-in";
         return Promise.reject(refreshError);
       }
     }
