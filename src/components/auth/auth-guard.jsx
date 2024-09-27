@@ -1,10 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Alert from 'react-bootstrap/Alert';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../paths"; // Assuming this is an object containing route paths.
 
-import { paths } from '../../paths'; // Assuming this is an object containing route paths.
-
-import { useUser } from '../../hooks/use-user'; // Assuming useUser is a hook to fetch user data.
+import { useUser } from "../../hooks/use-user"; // Assuming useUser is a hook to fetch user data.
 
 export function AuthGuard({ children }) {
   const navigate = useNavigate();
@@ -22,7 +20,9 @@ export function AuthGuard({ children }) {
     }
 
     if (!user) {
-      console.debug('[AuthGuard]: User is not logged in, redirecting to sign in');
+      console.debug(
+        "[AuthGuard]: User is not logged in, redirecting to sign in"
+      );
       navigate(paths.auth.signIn);
       return;
     }
@@ -31,17 +31,13 @@ export function AuthGuard({ children }) {
   };
 
   useEffect(() => {
-    checkPermissions().catch(() => {
-      // noop
+    checkPermissions().catch((e) => {
+      console.error(e);
     });
   }, [user, error, isLoading]);
 
   if (isChecking) {
     return null;
-  }
-
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
   }
 
   return <>{children}</>;

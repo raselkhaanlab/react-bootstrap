@@ -1,8 +1,8 @@
-import  { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Alert from 'react-bootstrap/Alert';
-import { paths } from '../../paths';
-import { useUser } from '../../hooks/use-user';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
+import { paths } from "../../paths";
+import { useUser } from "../../hooks/use-user";
 
 export function GuestGuard({ children }) {
   const navigate = useNavigate();
@@ -20,7 +20,9 @@ export function GuestGuard({ children }) {
     }
 
     if (user) {
-      console.debug('[GuestGuard]: User is logged in, redirecting to dashboard');
+      console.debug(
+        "[GuestGuard]: User is logged in, redirecting to dashboard"
+      );
       navigate(paths.dashboard.home); // Assuming paths.dashboard.overview is the dashboard route
       return;
     }
@@ -29,17 +31,14 @@ export function GuestGuard({ children }) {
   };
 
   useEffect(() => {
-    checkPermissions().catch(() => {
+    checkPermissions().catch((e) => {
       // noop
+      console.error(e);
     });
   }, [user, error, isLoading]);
 
   if (isChecking) {
     return null;
-  }
-
-  if (error) {
-    return <Alert variant="danger">{error}</Alert>;
   }
 
   return <>{children}</>;
