@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { Table, Form, Stack, Badge } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,9 +11,9 @@ import { useConfirmAction } from "../../../hooks/use-confrim";
 import { deleteusers, updateUsersStatus } from "../../../services/user";
 
 export function Users() {
-  const defaultPageLimit = 2;
+  const [itemPerPage, setItemPerPage] = React.useState(5);
   const { users, loading, setSearch, page, totalPages, fetchUsers } =
-    useUsers(defaultPageLimit);
+    useUsers(itemPerPage);
   const rowIds = useMemo(() => users.map((user) => user._id), [users]);
   const {
     selectAll,
@@ -134,12 +134,14 @@ export function Users() {
     <div className="shadow-lg rounded border">
       {/* Action toolbar at the top of the table */}
       <ActionToolbar
+        onChange={(e) => setItemPerPage(e.target.value)}
+        itemPerPage={itemPerPage}
         onBlock={() => handleAction("Block")}
         onUnblock={() => handleAction("Unblock")}
         onDelete={() => handleAction("Delete")}
         disabled={!selectedAny}
       />
-      <div className="table-responsive rounded">
+      <div className="table-responsive rounded pe-1 ps-1">
         <Table
           hover
           className="table-hover rounded"

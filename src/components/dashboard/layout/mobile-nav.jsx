@@ -1,10 +1,10 @@
-import { Offcanvas, Image, Nav } from "react-bootstrap";
+import { Offcanvas, Nav } from "react-bootstrap";
 
 import { navItems } from "./config";
 import { useLocation } from "react-router-dom";
 import Logo from "../../icons/logo.svg?react";
 export function MobileNav({ open, onClose }) {
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
   return (
     <Offcanvas
       className="d-flex d-lg-none flex-column bg-dark text-white mw-280"
@@ -14,7 +14,7 @@ export function MobileNav({ open, onClose }) {
     >
       <Offcanvas.Header closeButton closeVariant="white">
         <Offcanvas.Title>
-          <Logo/>
+          <Logo />
         </Offcanvas.Title>
       </Offcanvas.Header>
       <Offcanvas.Body className="d-flex flex-column p-0">
