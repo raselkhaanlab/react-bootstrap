@@ -15,7 +15,7 @@ const schema = zod.object({
   password: zod.string().min(1, { message: "Password is required" }),
 });
 
-const defaultValues = { email: "rkokk@gg.com", password: "Abcd1234!" };
+const defaultValues = { email: "", password: "" };
 
 export function SignInForm() {
   const navigate = useNavigate();
@@ -79,6 +79,7 @@ export function SignInForm() {
                 <Form.Control
                   {...field}
                   type="email"
+                  autoComplete="email"
                   placeholder="Enter your email"
                   className="form-control-md p-3"
                 />
@@ -106,6 +107,7 @@ export function SignInForm() {
                   <Form.Control
                     {...field}
                     className="p-3"
+                    autoComplete="current-password"
                     type={isEyeoff ? "password" : "text"}
                     placeholder="Enter your password"
                   />
