@@ -31,7 +31,7 @@ protectedClient.interceptors.response.use(
           refreshToken,
         });
         const { accessToken, user } = response.data;
-        console.log(response.data, "data");
+
         // Store the new access and refresh tokens.
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
@@ -41,13 +41,12 @@ protectedClient.interceptors.response.use(
       } catch (refreshError) {
         // Handle refresh token errors by clearing stored tokens and redirecting to the login page.
         console.error("Token refresh failed:", refreshError);
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
-        window.location.href = "/sign-in";
+        localStorage.clear();
         return Promise.reject(refreshError);
       }
     }
+    localStorage.clear();
+    window.location.href = "/sign-in";
     return Promise.reject(error); // For all other errors, return the error as is.
   }
 );
